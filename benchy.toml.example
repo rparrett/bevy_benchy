@@ -1,0 +1,17 @@
+[[commits]]
+commit="e9b3aeb38f3d41b89b58a2f6b739f7aea9a51e5b"
+label="Enhance Bevymark"
+
+[[commits]]
+commit="bf30a25efc35e3cd2dd8ad5aee8517eefcf6e72b"
+label="Bevy 0.12"
+
+[[benches]]
+example="bevymark"
+example_args=["--waves", "120", "--per-wave", "1000", "--benchmark"]
+label="bevymark 120 1000"
+
+[[benches]]
+example="bevymark"
+example_args=["--waves", "60", "--per-wave", "500", "--mode", "mesh2d", "--benchmark"]
+label="bevymark 60 500 mesh2d"
