@@ -1,16 +1,23 @@
 diff --git a/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs b/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
-index a17a6a19d..7ce238b7a 100644
+index 358696044..96500db39 100644
 --- a/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
 +++ b/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
-@@ -11,9 +11,9 @@ pub struct FrameTimeDiagnosticsPlugin;
+@@ -14,10 +14,14 @@ pub struct FrameTimeDiagnosticsPlugin;
+ 
  impl Plugin for FrameTimeDiagnosticsPlugin {
      fn build(&self, app: &mut bevy_app::App) {
-         app.register_diagnostic(
--            Diagnostic::new(Self::FRAME_TIME, "frame_time", 20).with_suffix("ms"),
-+            Diagnostic::new(Self::FRAME_TIME, "frame_time", 9999).with_suffix("ms"),
-         )
--        .register_diagnostic(Diagnostic::new(Self::FPS, "fps", 20))
-+        .register_diagnostic(Diagnostic::new(Self::FPS, "fps", 9999))
-         .register_diagnostic(
-             Diagnostic::new(Self::FRAME_COUNT, "frame_count", 1).with_smoothing_factor(0.0),
-         )
+-        app.register_diagnostic(Diagnostic::new(Self::FRAME_TIME).with_suffix("ms"))
+-            .register_diagnostic(Diagnostic::new(Self::FPS))
+-            .register_diagnostic(Diagnostic::new(Self::FRAME_COUNT).with_smoothing_factor(0.0))
+-            .add_systems(Update, Self::diagnostic_system);
++        app.register_diagnostic(
++            Diagnostic::new(Self::FRAME_TIME)
++                .with_suffix("ms")
++                .with_max_history_length(9999),
++        )
++        .register_diagnostic(Diagnostic::new(Self::FPS).with_max_history_length(9999))
++        .register_diagnostic(Diagnostic::new(Self::FRAME_COUNT).with_smoothing_factor(0.0))
++        .add_systems(Update, Self::diagnostic_system);
+     }
+ }
+ 
