@@ -1,3 +1,5 @@
+frames = 500
+
 [[commits]]
 commit="e9b3aeb38f3d41b89b58a2f6b739f7aea9a51e5b"
 label="Enhance Bevymark"

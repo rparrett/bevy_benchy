@@ -47,7 +47,8 @@ fn main() -> anyhow::Result<()> {
         bail!("At least one commit must be configured.");
     }
 
-    write_ci_config().context(format!("Failed to write CI config \"{}\"", CI_CONFIG_PATH))?;
+    write_ci_config(config.frames)
+        .context(format!("Failed to write CI config \"{}\"", CI_CONFIG_PATH))?;
 
     std::env::set_var("CI_TESTING_CONFIG", CI_CONFIG_PATH);
 
@@ -83,10 +84,13 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn write_ci_config() -> anyhow::Result<()> {
+fn write_ci_config(frames: u32) -> anyhow::Result<()> {
     std::fs::write(
         CI_CONFIG_PATH,
-        "(exit_after: Some(500), frame_time: None, screenshot_frames: [])",
+        format!(
+            "(exit_after: Some({}), frame_time: None, screenshot_frames: [])",
+            frames
+        ),
     )?;
 
     Ok(())

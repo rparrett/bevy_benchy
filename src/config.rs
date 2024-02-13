@@ -4,6 +4,7 @@ use serde::Deserialize;
 pub struct Config {
     pub commits: Vec<Commit>,
     pub benches: Vec<Bench>,
+    pub frames: u32,
 }
 
 #[derive(Deserialize, Eq, PartialEq, Hash, Clone)]
