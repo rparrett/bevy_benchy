@@ -105,17 +105,24 @@ fn checkout(commit: &str) -> anyhow::Result<()> {
 }
 
 fn apply_patches() -> anyhow::Result<()> {
-    let mut child = Command::new("git")
-        .arg("apply")
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .spawn()?;
+    let patches = [
+        include_str!("../patches/average-all-frames.patch"),
+        include_str!("../patches/more-logs.patch"),
+    ];
 
-    if let Some(mut child_stdin) = child.stdin.take() {
-        child_stdin.write_all(include_bytes!("../patches/average-all-frames.patch"))?;
+    for patch in patches {
+        let mut child = Command::new("git")
+            .arg("apply")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()?;
+
+        if let Some(mut child_stdin) = child.stdin.take() {
+            child_stdin.write_all(patch.as_bytes())?;
+        }
+
+        let _ = child.wait_with_output()?;
     }
-
-    let _ = child.wait_with_output()?;
 
     Ok(())
 }

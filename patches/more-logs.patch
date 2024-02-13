@@ -1,0 +1,13 @@
+diff --git a/crates/bevy_diagnostic/src/log_diagnostics_plugin.rs b/crates/bevy_diagnostic/src/log_diagnostics_plugin.rs
+index f3f576830..6a447a524 100644
+--- a/crates/bevy_diagnostic/src/log_diagnostics_plugin.rs
++++ b/crates/bevy_diagnostic/src/log_diagnostics_plugin.rs
+@@ -29,7 +29,7 @@ impl Default for LogDiagnosticsPlugin {
+     fn default() -> Self {
+         LogDiagnosticsPlugin {
+             debug: false,
+-            wait_duration: Duration::from_secs(1),
++            wait_duration: Duration::from_secs_f32(0.1),
+             filter: None,
+         }
+     }
