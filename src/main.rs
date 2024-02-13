@@ -134,7 +134,7 @@ fn print_markdown_table(results: &Results, config: &Config) {
     println!();
 
     for (i, commit) in config.commits.iter().enumerate() {
-        print!("|{}|", commit.label);
+        print!("|{}|", commit.label.as_ref().unwrap_or(&commit.commit));
 
         for bench in &config.benches {
             let fps = results.get(&(bench.clone(), commit.clone())).unwrap();

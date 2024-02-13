@@ -17,5 +17,5 @@ pub struct Bench {
 #[derive(Deserialize, Eq, PartialEq, Hash, Clone)]
 pub struct Commit {
     pub commit: String,
-    pub label: String,
+    pub label: Option<String>,
 }
