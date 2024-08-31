@@ -1,11 +1,11 @@
 diff --git a/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs b/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
-index 358696044..96500db39 100644
+index 99a727061..eb1049ccb 100644
 --- a/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
 +++ b/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
 @@ -14,10 +14,14 @@ pub struct FrameTimeDiagnosticsPlugin;
  
  impl Plugin for FrameTimeDiagnosticsPlugin {
-     fn build(&self, app: &mut bevy_app::App) {
+     fn build(&self, app: &mut App) {
 -        app.register_diagnostic(Diagnostic::new(Self::FRAME_TIME).with_suffix("ms"))
 -            .register_diagnostic(Diagnostic::new(Self::FPS))
 -            .register_diagnostic(Diagnostic::new(Self::FRAME_COUNT).with_smoothing_factor(0.0))
