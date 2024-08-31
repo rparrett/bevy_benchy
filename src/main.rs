@@ -72,6 +72,8 @@ fn main() -> anyhow::Result<()> {
             ];
             args.extend(bench.example_args.iter().map(|s| s.as_str()));
 
+            println!("Building and running {:?}..", bench);
+
             let output = Command::new("cargo").args(&args).output()?;
             std::io::stdout().write_all(&output.stdout).unwrap();
             std::io::stderr().write_all(&output.stderr).unwrap();

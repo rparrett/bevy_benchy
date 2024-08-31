@@ -7,7 +7,7 @@ pub struct Config {
     pub frames: u32,
 }
 
-#[derive(Deserialize, Eq, PartialEq, Hash, Clone)]
+#[derive(Deserialize, Eq, PartialEq, Hash, Clone, Debug)]
 pub struct Bench {
     pub example: String,
     pub example_args: Vec<String>,
