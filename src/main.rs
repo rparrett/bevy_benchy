@@ -48,7 +48,10 @@ fn main() -> anyhow::Result<()> {
     write_ci_config(config.frames)
         .context(format!("Failed to write CI config \"{}\"", CI_CONFIG_PATH))?;
 
-    std::env::set_var("CI_TESTING_CONFIG", CI_CONFIG_PATH);
+    // SAFETY: we are single-threaded
+    unsafe {
+        std::env::set_var("CI_TESTING_CONFIG", CI_CONFIG_PATH);
+    }
 
     let mut results: Results = HashMap::new();
 
