@@ -86,13 +86,7 @@ fn main() -> anyhow::Result<()> {
 }
 
 fn write_ci_config(frames: u32) -> anyhow::Result<()> {
-    std::fs::write(
-        CI_CONFIG_PATH,
-        format!(
-            "(exit_after: Some({}), frame_time: None, screenshot_frames: [])",
-            frames
-        ),
-    )?;
+    std::fs::write(CI_CONFIG_PATH, format!("(events: [({}, AppExit)])", frames))?;
 
     Ok(())
 }
