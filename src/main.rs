@@ -21,7 +21,7 @@ struct Args {
     config: String,
     #[argh(option)]
     /// path to git repository
-    dir: Option<String>,
+    dir: String,
 }
 
 type Results = HashMap<(Bench, Commit), f32>;
@@ -34,10 +34,8 @@ fn main() -> anyhow::Result<()> {
     let config: config::Config = toml::from_str(&config_str)
         .context(format!("Failed to deserialize \"{}\"", args.config))?;
 
-    if let Some(dir) = args.dir {
-        std::env::set_current_dir(&dir)
-            .context(format!("Failed to set working directory \"{dir}\""))?
-    }
+    std::env::set_current_dir(&args.dir)
+        .context(format!("Failed to set working directory \"{}\"", args.dir))?;
 
     if config.benches.is_empty() {
         bail!("At least one bench must be configured.");
