@@ -14,7 +14,7 @@ mod config;
 const CI_CONFIG_PATH: &str = "benchy-ci-config.ron";
 
 #[derive(FromArgs)]
-/// Options for bevy-benchy
+/// Options for bevy_benchy
 struct Args {
     /// path to config file
     #[argh(option, default = "String::from(\"benchy.toml\")")]
