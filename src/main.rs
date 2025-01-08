@@ -152,14 +152,14 @@ fn print_markdown_table(results: &Results, config: &Config) {
                 let frac = (fps - first) / first;
                 let sign = if frac > 0. { "+" } else { "" };
                 let sym = if frac.abs() < 0.01 {
-                    "🟡"
+                    "⬜"
                 } else if frac < 0. {
-                    "🔴"
+                    "🟥"
                 } else {
-                    "🟢"
+                    "🟩"
                 };
 
-                print!(" {}{} {:.1}%", sym, sign, frac * 100.);
+                print!(" {} {}{:.1}%", sym, sign, frac * 100.);
             }
 
             print!("|");
