@@ -13,3 +13,13 @@ Runs Bevy stress tests and outputs the results in a nice Markdown table.
 |-|-|-|
 |Enhance Bevymark|45.84|54.44|
 |Bevy 0.12|51.69 🟢+ 12.8%|55.16 🟢+ 1.3%|
+
+## TODO
+
+- [] Show table with benchmarks arranged vertically if there are more benchmarks than commits
+- [] `from` and `to`
+- [] Automatically build commit and bench labels, allowing overrides in the config
+- [] Get upstream support for configuring max history length for `FrameTimeDiagnosticsPlugin`
+- [] Could we get diagnostics from BRP when support for resources lands?
+- [] Use squares in tables instead of circles
+- [] Use neutral color square in place of yellow square
