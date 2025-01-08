@@ -127,7 +127,7 @@ fn apply_patches() -> anyhow::Result<()> {
 fn print_markdown_table(results: &Results, config: &Config) {
     print!("||");
     for bench in &config.benches {
-        print!("{}|", bench.label);
+        print!("{}|", bench.label());
     }
     println!();
 
@@ -138,7 +138,7 @@ fn print_markdown_table(results: &Results, config: &Config) {
     println!();
 
     for (i, commit) in config.commits.iter().enumerate() {
-        print!("|{}|", commit.label.as_ref().unwrap_or(&commit.commit));
+        print!("|{}|", commit.label());
 
         for bench in &config.benches {
             let fps = results.get(&(bench.clone(), commit.clone())).unwrap();
