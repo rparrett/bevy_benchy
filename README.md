@@ -16,4 +16,4 @@ Runs Bevy stress tests and outputs the results in a nice Markdown table.
 
 ## TODO
 
-- [] Get upstream support for configuring max history length for `FrameTimeDiagnosticsPlugin`
+- [ ] Get upstream support for configuring max history length for `FrameTimeDiagnosticsPlugin`
