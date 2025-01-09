@@ -12,6 +12,8 @@ use std::{
 mod config;
 
 const CI_CONFIG_PATH: &str = "benchy-ci-config.ron";
+const LINK_TEXT: &str =
+    "<sub><sup>[bevy_benchy](https://github.com/rparrett/bevy_benchy)</sup></sub>";
 
 #[derive(FromArgs)]
 /// Options for bevy_benchy
@@ -82,7 +84,7 @@ fn main() -> anyhow::Result<()> {
         }
     }
 
-    print_markdown_table(&results, &config);
+    print_results(&results, &config);
 
     Ok(())
 }
@@ -124,51 +126,6 @@ fn apply_patches() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn print_markdown_table(results: &Results, config: &Config) {
-    print!("||");
-    for bench in &config.benches {
-        print!("{}|", bench.label());
-    }
-    println!();
-
-    print!("|-|");
-    for _ in &config.benches {
-        print!("-|");
-    }
-    println!();
-
-    for (i, commit) in config.commits.iter().enumerate() {
-        print!("|{}|", commit.label());
-
-        for bench in &config.benches {
-            let fps = results.get(&(bench.clone(), commit.clone())).unwrap();
-            let first = results
-                .get(&(bench.clone(), config.commits[0].clone()))
-                .unwrap();
-
-            print!("{:.2}", fps);
-
-            if i > 0 {
-                let frac = (fps - first) / first;
-                let sign = if frac > 0. { "+" } else { "" };
-                let sym = if frac.abs() < 0.01 {
-                    "⬜"
-                } else if frac < 0. {
-                    "🟥"
-                } else {
-                    "🟩"
-                };
-
-                print!(" {} {}{:.1}%", sym, sign, frac * 100.);
-            }
-
-            print!("|");
-        }
-        println!();
-    }
-    println!();
-}
-
 fn get_fps(output: &str) -> anyhow::Result<f32> {
     static RE: OnceLock<Regex> = OnceLock::new();
     let re = RE.get_or_init(|| Regex::new(r"fps.*?avg ([\d\.]+)").unwrap());
@@ -182,4 +139,120 @@ fn get_fps(output: &str) -> anyhow::Result<f32> {
     let parsed = fps.parse::<f32>()?;
 
     Ok(parsed)
+}
+
+fn print_results(results: &Results, config: &Config) {
+    // Build the results table
+
+    let mut rows = vec![vec![]; config.commits.len() + 1];
+
+    rows[0].push(LINK_TEXT.to_string());
+    for bench in &config.benches {
+        rows[0].push(bench.label());
+    }
+
+    for (i, commit) in config.commits.iter().enumerate() {
+        rows[i + 1].push(commit.label().to_string());
+
+        for bench in &config.benches {
+            let fps = results.get(&(bench.clone(), commit.clone())).unwrap();
+            let first = results
+                .get(&(bench.clone(), config.commits[0].clone()))
+                .unwrap();
+
+            let comparison = if i > 0 {
+                let frac = (fps - first) / first;
+                let sign = if frac > 0. { "+" } else { "" };
+                let sym = if frac.abs() < 0.01 {
+                    "⬜"
+                } else if frac < 0. {
+                    "🟥"
+                } else {
+                    "🟩"
+                };
+                format!(" {} {}{:.1}%", sym, sign, frac * 100.)
+            } else {
+                "".to_string()
+            };
+
+            rows[i + 1].push(format!("{:.2}{}", fps, comparison));
+        }
+    }
+
+    // Rotate the table so the longer dimension is vertical
+    let table = if rows[0].len() > rows.len() {
+        &rotate_table(&rows)
+    } else {
+        &rows
+    };
+
+    print_markdown(table);
+}
+
+/// Rotates a table 90 degrees counter-clockwise
+fn rotate_table(table: &[Vec<String>]) -> Vec<Vec<String>> {
+    if table.is_empty() {
+        return vec![];
+    }
+
+    let rows = table.len();
+    let cols = table.first().unwrap().len();
+
+    let mut rotated = vec![vec![String::new(); rows]; cols];
+
+    for (row_i, row) in table.iter().enumerate() {
+        for (col_i, value) in row.iter().enumerate() {
+            rotated[col_i][row_i] = value.clone();
+        }
+    }
+
+    rotated
+}
+
+fn print_markdown(table: &[Vec<String>]) {
+    if table.is_empty() {
+        return;
+    }
+
+    let mut rows = table.iter();
+
+    let header = rows.next().unwrap();
+    println!("|{}|", header.join("|"));
+
+    // Separators
+    println!("|{}|", vec!["-".to_string(); header.len()].join("|"));
+
+    // Data
+    for row in rows {
+        println!("|{}|", row.join("|"));
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn table_rotation() {
+        let table = vec![
+            vec!["h1".to_string(), "h2".to_string(), "h3".to_string()],
+            vec!["d1".to_string(), "d2".to_string(), "d3".to_string()],
+        ];
+        let rotated = rotate_table(&table);
+        assert_eq!(
+            rotated,
+            vec![
+                vec!["h1".to_string(), "d1".to_string()],
+                vec!["h2".to_string(), "d2".to_string()],
+                vec!["h3".to_string(), "d3".to_string()],
+            ]
+        )
+    }
+
+    #[test]
+    fn empty_table_rotation() {
+        let table: Vec<Vec<String>> = vec![];
+        let rotated = rotate_table(&table);
+        assert_eq!(rotated, table);
+    }
 }

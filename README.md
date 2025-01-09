@@ -16,6 +16,4 @@ Runs Bevy stress tests and outputs the results in a nice Markdown table.
 
 ## TODO
 
-- [] Show table with benchmarks arranged vertically if there are more benchmarks than commits
 - [] Get upstream support for configuring max history length for `FrameTimeDiagnosticsPlugin`
-- [] Could we get diagnostics from BRP when support for resources lands?
