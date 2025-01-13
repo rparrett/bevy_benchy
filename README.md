@@ -16,4 +16,6 @@ Runs Bevy stress tests and outputs the results in a nice Markdown table.
 
 ## TODO
 
-- [ ] Get upstream support for configuring max history length for `FrameTimeDiagnosticsPlugin`
+- [ ] Don't panic when a command fails for a commit. Allow empty results in the output table.
+- [ ] Don't panic when patches fail to apply for a commit. Warn loudly.
+- [ ] Fix `average-all-frames` patch.
