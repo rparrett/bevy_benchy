@@ -1,0 +1,13 @@
+diff --git a/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs b/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
+index 22b6176fa..6c023e3c2 100644
+--- a/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
++++ b/crates/bevy_diagnostic/src/frame_time_diagnostics_plugin.rs
+@@ -19,7 +19,7 @@ pub struct FrameTimeDiagnosticsPlugin {
+ }
+ impl Default for FrameTimeDiagnosticsPlugin {
+     fn default() -> Self {
+-        Self::new(DEFAULT_MAX_HISTORY_LENGTH)
++        Self::new(9999)
+     }
+ }
+ impl FrameTimeDiagnosticsPlugin {

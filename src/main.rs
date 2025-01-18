@@ -106,21 +106,26 @@ fn checkout(commit: &str) -> anyhow::Result<()> {
 fn apply_patches() -> anyhow::Result<()> {
     let patches = [
         include_str!("../patches/average-all-frames.patch"),
+        include_str!("../patches/average-all-frames-2.patch"),
         include_str!("../patches/more-logs.patch"),
     ];
 
-    for patch in patches {
+    for (i, patch) in patches.iter().enumerate() {
         let mut child = Command::new("git")
             .arg("apply")
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
             .spawn()?;
 
         if let Some(mut child_stdin) = child.stdin.take() {
             child_stdin.write_all(patch.as_bytes())?;
         }
 
-        let _ = child.wait_with_output()?;
+        let output = child.wait_with_output()?;
+        if !output.status.success() {
+            println!("Patch {i} failed.");
+        }
     }
 
     Ok(())
